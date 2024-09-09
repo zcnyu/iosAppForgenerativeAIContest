@@ -1,0 +1,2 @@
+# iosAppForgenerativeAIContest
+生成AIにおいて偏頭痛患者が頭痛の記録を取るためのiosアプリ
