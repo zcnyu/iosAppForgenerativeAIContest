@@ -1,31 +1,34 @@
 //
-//  ContentView.swift
+//  SignUpView.swift
 //  migraine
 //
-//  Created by 中川悠 on 2024/08/18.
-//
+//  Created by 中川悠 on 2024/08/19.
 
 import SwiftUI
 
-struct ContentView: View {
+struct SignUpView: View {
+    @State var inputUsername: String = ""
     @State var inputEmail: String = ""
     @State var inputPassword: String = ""
+    @State var inputPrefecture: String = ""
+    @State var inputMedicine: String = ""
     @State var isPatient: Bool = true // 患者か医者かを管理する状態
     @State var loginSuccess: Bool = false
-    @State var navigateToMainViewFlag: Bool = false // MainViewに遷移するフラグ
-    @State var navigateToAssessViewFlag: Bool = false // AssessViewに遷移するフラグ
-    @EnvironmentObject var userSession: UserSession 
-
+    @State var navigateToMainViewFlag2: Bool = false // MainViewに遷移するフラグ
+    @State var navigateToAssessViewFlag2: Bool = false // AssessViewに遷移するフラグ
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var userSession: UserSession
 
     var body: some View {
         NavigationView {
             VStack(alignment: .center) {
-                Spacer().frame(height: 30)
-                
-                Text("偏頭痛日記\n ログイン")
-                    .font(.system(size: 48, weight: .heavy))
+                Spacer()
+                    .frame(height: 30)
+                Text("偏頭痛日記\n サインアップ")
+                    .font(.system(size: 48,
+                                  weight: .heavy))
                     .multilineTextAlignment(.center)
-
+                
                 // 患者/医者切り替えボタン
                 HStack {
                     Button(action: {
@@ -55,58 +58,65 @@ struct ContentView: View {
                 .padding(.bottom, 20)
 
                 VStack(spacing: 24) {
+                    TextField("Username", text: $inputUsername)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(maxWidth: 280)
+
                     TextField("Mail address", text: $inputEmail)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(maxWidth: 280)
+
+                    TextField("都道府県", text: $inputPrefecture)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(maxWidth: 280)
+
+                    TextField("薬", text: $inputMedicine)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(maxWidth: 280)
 
                     SecureField("Password", text: $inputPassword)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(maxWidth: 280)
+
                 }
                 .frame(height: 250)
 
-                // ログインボタン
                 Button(action: {
-                    login(email: inputEmail, password: inputPassword)
-                }) {
-                    Text("Login")
+                    signup(username: inputUsername, email: inputEmail, password: inputPassword, prefecture: inputPrefecture, medicine: inputMedicine)
+                },
+                label: {
+                    Text("Sign up")
                         .fontWeight(.medium)
                         .frame(minWidth: 160)
                         .foregroundColor(.white)
                         .padding(12)
                         .background(Color.accentColor)
                         .cornerRadius(8)
-                }
-
-                // Sign Up ボタン（SignUpViewに遷移）
-                NavigationLink(destination: SignUpView()) {
-                    Text("Sign Up")
-                        .fontWeight(.medium)
-                        .frame(minWidth: 160)
-                        .foregroundColor(.white)
-                        .padding(12)
-                        .background(Color.green)
-                        .cornerRadius(8)
-                }
-                .padding(.top, 20)
+                })
 
                 Spacer()
                 // NavigationLinkでMainViewに遷移
-                NavigationLink(destination: MainView(), isActive: $navigateToMainViewFlag) {
+                NavigationLink(destination: MainView(), isActive: $navigateToMainViewFlag2) {
                     EmptyView()
                 }
 
                 // NavigationLinkでAssessViewに遷移
-                NavigationLink(destination: AssessView(), isActive: $navigateToAssessViewFlag) {
+                NavigationLink(destination: AssessView(), isActive: $navigateToAssessViewFlag2) {
                     EmptyView()
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("戻る") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
         }
         .navigationBarBackButtonHidden(true) 
     }
     
-    // 患者か医者によって異なるURLにアクセスする関数
-    func login(email: String, password: String) {
+    func signup(username: String, email: String, password: String, prefecture: String, medicine: String) {
         let urlString = isPatient ? "http://patient" : "http://doctor"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
@@ -118,8 +128,11 @@ struct ContentView: View {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let body: [String: Any] = [
+            "username": username,
             "email": email,
-            "password": password
+            "password": password,
+            "prefecture": prefecture,
+            "medicine": medicine
         ]
         
         do {
@@ -130,56 +143,51 @@ struct ContentView: View {
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-        //    if let error = error {
-        //        print("Login request failed: \(error.localizedDescription)")
-        //        return
-        //    }
+//            if let error = error {
+//                print("Login request failed: \(error.localizedDescription)")
+//                return
+//            }
             
-            guard let data = data else {
-                print("No data received")
-                return
-            }
+//            guard let data = data else {
+//                print("No data received")
+//                return
+//            }
             
             // サーバーからのレスポンスを処理
-            do {
-                if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                    let userID = jsonResponse["user_ID"] as? String,
-                    let jwtToken = jsonResponse["jwt_token"] as? String {
-                    DispatchQueue.main.async {
-                        self.userSession.userID = userID // userIDを更新
-                        self.userSession.jwt_token = jwtToken // jwt_tokenを更新
-                        loginSuccess = true
-                        // ログイン成功時に画面遷移
-                        if isPatient {
-                            // 患者ならMainViewへ
-                            navigateToMainView()
-                        } else {
-                            // 医者ならAssessViewへ
-                            navigateToAssessView()
-                        }
+//            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201{
+            if true{
+                print("Signup successful")
+                userSession.userID = inputUsername
+                DispatchQueue.main.async {
+                    loginSuccess = true
+                    // ログイン成功時に画面遷移
+                    if isPatient {
+                        // 患者ならMainViewへ
+                        navigateToMainView()
+                    } else {
+                        // 医者ならAssessViewへ
+                        navigateToAssessView()
                     }
-                } else {
-                    print("Invalid JSON response")
                 }
-            } catch {
-                print("Failed to parse response: \(error.localizedDescription)")
+            } else {
+                print("Signup failed")
             }
         }.resume()
     }
     
     // 患者用のMainViewに遷移
     func navigateToMainView() {
-        navigateToMainViewFlag = true
+        navigateToMainViewFlag2 = true
     }
 
     // 医者用のAssessViewに遷移
     func navigateToAssessView() {
-        navigateToAssessViewFlag = true
+        navigateToAssessViewFlag2 = true
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        SignUpView()
     }
 }

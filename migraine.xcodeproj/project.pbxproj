@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A610F202C8ACB9400F1EED9 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */; };
+		0A610F222C8ADA1200F1EED9 /* AssessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A610F212C8ADA1200F1EED9 /* AssessView.swift */; };
 		0A6948942C721A7D00B09AD5 /* migraineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948932C721A7D00B09AD5 /* migraineApp.swift */; };
 		0A6948962C721A7D00B09AD5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948952C721A7D00B09AD5 /* ContentView.swift */; };
 		0A6948982C721A8200B09AD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A6948972C721A8200B09AD5 /* Assets.xcassets */; };
@@ -14,6 +16,9 @@
 		0A6948A52C721A8300B09AD5 /* migraineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948A42C721A8300B09AD5 /* migraineTests.swift */; };
 		0A6948AF2C721A8300B09AD5 /* migraineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948AE2C721A8300B09AD5 /* migraineUITests.swift */; };
 		0A6948B12C721A8300B09AD5 /* migraineUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948B02C721A8300B09AD5 /* migraineUITestsLaunchTests.swift */; };
+		0A6948BE2C73316800B09AD5 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948BD2C73316800B09AD5 /* LoginView.swift */; };
+		0A6948C02C73337200B09AD5 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948BF2C73337100B09AD5 /* SignUpView.swift */; };
+		0A6948C22C77843D00B09AD5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948C12C77843C00B09AD5 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		0A610F212C8ADA1200F1EED9 /* AssessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessView.swift; sourceTree = "<group>"; };
 		0A6948902C721A7D00B09AD5 /* migraine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = migraine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6948932C721A7D00B09AD5 /* migraineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = migraineApp.swift; sourceTree = "<group>"; };
 		0A6948952C721A7D00B09AD5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +51,9 @@
 		0A6948AA2C721A8300B09AD5 /* migraineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = migraineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6948AE2C721A8300B09AD5 /* migraineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = migraineUITests.swift; sourceTree = "<group>"; };
 		0A6948B02C721A8300B09AD5 /* migraineUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = migraineUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		0A6948BD2C73316800B09AD5 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		0A6948BF2C73337100B09AD5 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		0A6948C12C77843C00B09AD5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +106,11 @@
 			children = (
 				0A6948932C721A7D00B09AD5 /* migraineApp.swift */,
 				0A6948952C721A7D00B09AD5 /* ContentView.swift */,
+				0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */,
+				0A6948C12C77843C00B09AD5 /* MainView.swift */,
+				0A610F212C8ADA1200F1EED9 /* AssessView.swift */,
+				0A6948BD2C73316800B09AD5 /* LoginView.swift */,
+				0A6948BF2C73337100B09AD5 /* SignUpView.swift */,
 				0A6948972C721A8200B09AD5 /* Assets.xcassets */,
 				0A6948992C721A8200B09AD5 /* Preview Content */,
 			);
@@ -257,7 +272,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A6948C02C73337200B09AD5 /* SignUpView.swift in Sources */,
+				0A610F222C8ADA1200F1EED9 /* AssessView.swift in Sources */,
+				0A6948BE2C73316800B09AD5 /* LoginView.swift in Sources */,
 				0A6948962C721A7D00B09AD5 /* ContentView.swift in Sources */,
+				0A610F202C8ACB9400F1EED9 /* ChatView.swift in Sources */,
+				0A6948C22C77843D00B09AD5 /* MainView.swift in Sources */,
 				0A6948942C721A7D00B09AD5 /* migraineApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,6 +437,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"migraine/Preview Content\"";
+				DEVELOPMENT_TEAM = 2XZWJNTYX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -445,6 +466,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"migraine/Preview Content\"";
+				DEVELOPMENT_TEAM = 2XZWJNTYX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
