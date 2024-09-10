@@ -13,6 +13,7 @@ struct ChatView: View {
     @State private var currentQuestionID: String? = nil
     @Environment(\.presentationMode) var presentationMode
     @State private var scrollViewProxy: ScrollViewProxy? = nil
+    @EnvironmentObject var chatData: ChatData
 
     var body: some View {
         NavigationView {
@@ -90,14 +91,15 @@ struct ChatView: View {
         messages.append(newMessage)
 
         // 回答をサーバに送信
-        postAnswer(chatID: UserSession.shared.chatID, questionID: questionID, answer: inputText)
+        postAnswer(chatID: chatData.chatID, questionID: questionID, answer: inputText)
 
         inputText = ""
     }
 
     // 質問取得
     func fetchNewQuestion() {
-        let chatID = UserSession.shared.chatID
+        let chatID = chatData.chatID
+        print("chatID----------\n"+chatID)
         guard let url = URL(string: UserSession.shared.endPoint + "/gen_question") else { return }
         
         var request = URLRequest(url: url)
@@ -118,7 +120,6 @@ struct ChatView: View {
                         // 新しい質問を表示
                         messages.append(Message(text: question, isSentByUser: false))
                         currentQuestionID = questionID
-                        UserSession.shared.questionID = questionID
                     }
                 }
             } catch {

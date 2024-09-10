@@ -15,8 +15,6 @@ class UserSession: ObservableObject {
     var userID: String = ""
     var userName: String = "不明"
     var endPoint: String = "http://13.210.90.34:5000"
-    var chatID: String = ""
-    var questionID: String = ""
 }
 
 struct ContentView: View {

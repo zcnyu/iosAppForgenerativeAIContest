@@ -166,6 +166,10 @@ import SwiftUI
 import Charts
 import Foundation
 
+class ChatData: ObservableObject{
+    @Published var chatID: String = ""
+}
+
 struct MainView: View {
     var body: some View {
         TabView {
@@ -193,6 +197,7 @@ struct WeatherView: View {
     @State private var isLoggingOut = false
     @State private var isNavigatingToChatView = false
     @State private var showError = false
+    @StateObject var chatData = ChatData()
     var body: some View {
         NavigationView{
             VStack {
@@ -252,7 +257,7 @@ struct WeatherView: View {
                             fetchWeatherData()
                         }
                 }
-                NavigationLink(destination: ChatView(), isActive: $isNavigatingToChatView) {
+                NavigationLink(destination: ChatView().environmentObject(chatData), isActive: $isNavigatingToChatView) {
                     EmptyView()
                 }
                 Button(action: {
@@ -288,6 +293,7 @@ struct WeatherView: View {
             }
             .fullScreenCover(isPresented: $isLoggingOut) {
                 ContentView()
+                    .environmentObject(chatData)
                     .transition(.move(edge: .trailing)) // 右から左にスライド
             }
             .padding()
@@ -342,7 +348,8 @@ struct WeatherView: View {
                     if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                         let chatID = jsonResponse["chat_id"] as? String {
                         DispatchQueue.main.async {
-                            UserSession.shared.chatID = chatID // userIDを更新
+                            print("chatID----\n" + chatID)
+                            chatData.chatID = chatID // userIDを更新
                         }
                     } else {
                         print("Invalid JSON response")
