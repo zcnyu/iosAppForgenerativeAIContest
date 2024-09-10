@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+class UserSession: ObservableObject {
+    static let shared = UserSession()
+
+    private init() {} // このクラスの他のインスタンスが作成されないようにす
+    var jwt_token: String = ""
+    var userID: String = ""
+    var userName: String = "不明"
+    var endPoint: String = "http://13.210.90.34:5000"
+    var chatID: String = ""
+    var questionID: String = ""
+}
+
 struct ContentView: View {
     @State var inputEmail: String = ""
     @State var inputPassword: String = ""
@@ -14,7 +26,6 @@ struct ContentView: View {
     @State var loginSuccess: Bool = false
     @State var navigateToMainViewFlag: Bool = false // MainViewに遷移するフラグ
     @State var navigateToAssessViewFlag: Bool = false // AssessViewに遷移するフラグ
-    @EnvironmentObject var userSession: UserSession 
 
 
     var body: some View {
@@ -58,16 +69,24 @@ struct ContentView: View {
                     TextField("Mail address", text: $inputEmail)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(maxWidth: 280)
+                        .toolbar { // 完了ボタンを追加
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("完了") {
+                                    hideKeyboard()
+                                }
+                            }
+                        }
 
                     SecureField("Password", text: $inputPassword)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(maxWidth: 280)
                 }
                 .frame(height: 250)
-
+                var role = isPatient ? "user" : "doctor"
                 // ログインボタン
                 Button(action: {
-                    login(email: inputEmail, password: inputPassword)
+                    login(email: inputEmail, password: inputPassword, role: role)
                 }) {
                     Text("Login")
                         .fontWeight(.medium)
@@ -99,6 +118,7 @@ struct ContentView: View {
                 // NavigationLinkでAssessViewに遷移
                 NavigationLink(destination: AssessView(), isActive: $navigateToAssessViewFlag) {
                     EmptyView()
+//                        .environmentObject(userSession)
                 }
             }
         }
@@ -106,8 +126,8 @@ struct ContentView: View {
     }
     
     // 患者か医者によって異なるURLにアクセスする関数
-    func login(email: String, password: String) {
-        let urlString = isPatient ? "http://patient" : "http://doctor"
+    func login(email: String, password: String, role: String) {
+        let urlString =  UserSession.shared.endPoint + "/login"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return
@@ -119,7 +139,8 @@ struct ContentView: View {
         
         let body: [String: Any] = [
             "email": email,
-            "password": password
+            "password": password,
+            "role": role
         ]
         
         do {
@@ -130,10 +151,10 @@ struct ContentView: View {
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-        //    if let error = error {
-        //        print("Login request failed: \(error.localizedDescription)")
-        //        return
-        //    }
+            if let error = error {
+                print("Login request failed: \(error.localizedDescription)")
+                return
+            }
             
             guard let data = data else {
                 print("No data received")
@@ -143,11 +164,15 @@ struct ContentView: View {
             // サーバーからのレスポンスを処理
             do {
                 if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                    let userID = jsonResponse["user_ID"] as? String,
+                    let userID = jsonResponse["user_id"] as? String,
+                    let userName = jsonResponse["user_name"] as? String,
                     let jwtToken = jsonResponse["jwt_token"] as? String {
                     DispatchQueue.main.async {
-                        self.userSession.userID = userID // userIDを更新
-                        self.userSession.jwt_token = jwtToken // jwt_tokenを更新
+                        UserSession.shared.userID = userID // userIDを更新
+                        print(userID)
+                        UserSession.shared.jwt_token = jwtToken // jwt_tokenを更新
+                        print(jwtToken)
+                        UserSession.shared.userName = userName
                         loginSuccess = true
                         // ログイン成功時に画面遷移
                         if isPatient {
@@ -167,6 +192,10 @@ struct ContentView: View {
         }.resume()
     }
     
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
     // 患者用のMainViewに遷移
     func navigateToMainView() {
         navigateToMainViewFlag = true
@@ -175,6 +204,12 @@ struct ContentView: View {
     // 医者用のAssessViewに遷移
     func navigateToAssessView() {
         navigateToAssessViewFlag = true
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

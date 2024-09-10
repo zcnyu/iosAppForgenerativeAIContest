@@ -167,7 +167,6 @@ import Charts
 import Foundation
 
 struct MainView: View {
-    @EnvironmentObject var userSession: UserSession
     var body: some View {
         TabView {
             WeatherView()
@@ -184,12 +183,6 @@ struct MainView: View {
                 }
         }
         .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Text(userSession.userID) // 右上にユーザ名を表示
-                    .font(.headline)
-            }
-        }
     }
     
 }
@@ -198,7 +191,8 @@ struct WeatherView: View {
     @State private var weatherData: WeatherResponse?
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoggingOut = false
-
+    @State private var isNavigatingToChatView = false
+    @State private var showError = false
     var body: some View {
         NavigationView{
             VStack {
@@ -246,7 +240,7 @@ struct WeatherView: View {
                                     .chartYScale(domain: 1000...1025)
                                     .font(.caption)
                                     .frame(height: 400)
-                                    .padding(.leading, 5) // 縦軸ラベル分のスペースを確保
+                                    .padding(.leading, 50) // 縦軸ラベル分のスペースを確保
                                 }
                                 
                             }
@@ -258,7 +252,12 @@ struct WeatherView: View {
                             fetchWeatherData()
                         }
                 }
-                NavigationLink(destination: ChatView()) {
+                NavigationLink(destination: ChatView(), isActive: $isNavigatingToChatView) {
+                    EmptyView()
+                }
+                Button(action: {
+                    fetchData()
+                }) {
                     Text("記録")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -267,7 +266,9 @@ struct WeatherView: View {
                         .background(Color.blue)
                         .cornerRadius(10)
                 }
-                .padding(30)
+                .alert(isPresented: $showError) {
+                    Alert(title: Text("エラー"), message: Text("サーバに接続できませんでした"), dismissButton: .default(Text("OK")))
+                }
             }
             .navigationBarTitle("天気予報", displayMode: .inline)
             .toolbar {
@@ -277,6 +278,12 @@ struct WeatherView: View {
                             isLoggingOut = true
                         }
                     }
+                    
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                   Text(UserSession.shared.userName) // 右上にユーザ名を表示
+                    // Text("name")
+                        .font(.headline)
                 }
             }
             .fullScreenCover(isPresented: $isLoggingOut) {
@@ -287,11 +294,93 @@ struct WeatherView: View {
         }
     }
 
+    func fetchData() {
+        guard let url = URL(string: UserSession.shared.endPoint + "/start_chat") else {
+            print("Invalid URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(UserSession.shared.jwt_token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = ["user_id": UserSession
+            .shared.userID
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+        } catch {
+            print("Failed to serialize request body: \(error.localizedDescription)")
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard error == nil, let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    showError = true
+                }
+                return
+            }
+
+            // データがnilでないことを確認してからアンラップ
+            guard let data = data else {
+                print("No data received")
+                DispatchQueue.main.async {
+                    showError = true
+                }
+                return
+            }
+
+            if httpResponse.statusCode == 201 {
+                DispatchQueue.main.async {
+                    isNavigatingToChatView = true
+                }
+                // サーバーからのレスポンスを処理
+                do {
+                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                        let chatID = jsonResponse["chat_id"] as? String {
+                        DispatchQueue.main.async {
+                            UserSession.shared.chatID = chatID // userIDを更新
+                        }
+                    } else {
+                        print("Invalid JSON response")
+                    }
+                } catch {
+                    print("Failed to parse response: \(error.localizedDescription)")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    showError = true
+                }
+            }
+        }
+
+        task.resume()
+    }
+
     func fetchWeatherData() {
+        //Open Meteoから直接取得
         guard let url = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&hourly=temperature_2m,weather_code,pressure_msl&timezone=Asia%2FTokyo&forecast_days=16") else {
             print("Invalid URL")
             return
         }
+
+        // APIのエンドポイントURL
+        // guard let url = URL(string: UserSession.endPoint + "")!{
+        //     print("Invalid URL")
+        //     return
+        // }
+        
+        // リクエストの作成
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        // AuthorizationヘッダーにJWTトークンを設定
+        request.setValue("Bearer \(UserSession.shared.jwt_token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {

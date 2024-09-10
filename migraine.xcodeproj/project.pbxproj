@@ -41,6 +41,7 @@
 /* Begin PBXFileReference section */
 		0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		0A610F212C8ADA1200F1EED9 /* AssessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessView.swift; sourceTree = "<group>"; };
+		0A66BB012C8EF7E500A9A261 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0A6948902C721A7D00B09AD5 /* migraine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = migraine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6948932C721A7D00B09AD5 /* migraineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = migraineApp.swift; sourceTree = "<group>"; };
 		0A6948952C721A7D00B09AD5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 		0A6948922C721A7D00B09AD5 /* migraine */ = {
 			isa = PBXGroup;
 			children = (
+				0A66BB012C8EF7E500A9A261 /* Info.plist */,
 				0A6948932C721A7D00B09AD5 /* migraineApp.swift */,
 				0A6948952C721A7D00B09AD5 /* ContentView.swift */,
 				0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */,
@@ -205,6 +207,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
@@ -440,6 +445,7 @@
 				DEVELOPMENT_TEAM = 2XZWJNTYX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = migraine/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -469,6 +475,7 @@
 				DEVELOPMENT_TEAM = 2XZWJNTYX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = migraine/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
