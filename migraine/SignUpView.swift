@@ -160,7 +160,7 @@ struct SignUpView: View {
                     }
                     
                     // NavigationLinkでAssessViewに遷移
-                    NavigationLink(destination: AssessView(), isActive: $navigateToAssessViewFlag2) {
+                    NavigationLink(destination: PatientView(), isActive: $navigateToAssessViewFlag2) {
                         EmptyView()
                     }
                 }

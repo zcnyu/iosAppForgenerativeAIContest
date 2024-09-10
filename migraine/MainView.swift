@@ -394,7 +394,7 @@ struct RecordView: View {
                     .padding()
                 }
             }
-            .navigationBarTitle(Text(detailData.patient.user_name), displayMode: .inline) // ナビゲーションバーの中央に患者名
+//            .navigationBarTitle(Text(detailData.patient.user_name), displayMode: .inline) // ナビゲーションバーの中央に患者名
         }
     }
     

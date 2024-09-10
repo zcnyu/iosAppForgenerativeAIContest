@@ -78,6 +78,7 @@ let mockAnalysisData = MockAnalysisData(
 )
 
 struct AnalysisView: View {
+//    @ObservedObject var viewModel: PatientDetailViewModel
     let analysisData: MockAnalysisData
     
     var body: some View {

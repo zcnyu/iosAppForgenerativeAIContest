@@ -114,7 +114,7 @@ struct ContentView: View {
                 }
 
                 // NavigationLinkでAssessViewに遷移
-                NavigationLink(destination: AssessView(), isActive: $navigateToAssessViewFlag) {
+                NavigationLink(destination: PatientView(), isActive: $navigateToAssessViewFlag) {
                     EmptyView()
 //                        .environmentObject(userSession)
                 }

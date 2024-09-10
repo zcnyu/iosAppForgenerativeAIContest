@@ -6,17 +6,65 @@
 //
 
 import SwiftUI
+import Foundation
+import Combine
 
-struct Patient: Identifiable, Codable {
-    let id: String
+class PatientDetailViewModel: ObservableObject {
+    @Published var detailData: [PatientDetailData] = []
+    private var cancellables = Set<AnyCancellable>()
+
+    func fetchDetailData(patientId: String, periodStart: String, periodEnd: String, recentK: Int) {
+        guard let url = URL(string: UserSession.shared.endPoint + "/get_user_info") else {
+            print("Invalid URL")
+            return
+        }
+
+        // URLリクエストを作成し、必要なヘッダー情報を追加
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(UserSession.shared.jwt_token)", forHTTPHeaderField: "Authorization")
+
+        // リクエストのボディに必要なパラメータを設定
+        let body: [String: Any] = [
+            "user_id": patientId,
+            "period_start": periodStart,
+            "period_end": periodEnd,
+            "recent_k": recentK
+        ]
+
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+
+        // URLSessionでデータタスクを作成してリクエストを実行
+        URLSession.shared.dataTaskPublisher(for: request)
+            .map(\.data)
+            .decode(type: [PatientDetailData].self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    print("Failed to fetch data: \(error)")
+                }
+            }, receiveValue: { [weak self] detailData in
+                self?.detailData = detailData
+            })
+            .store(in: &cancellables)
+    }
+}
+
+// JSONに基づいてPatient構造体を定義
+struct Patient: Identifiable, Decodable {
+    let id = UUID() // Listで使うための一意の識別子
     let user_id: String
     let user_name: String
     let user_email: String
-    let headache_intensity: Int
-    let medicine_taken: Bool
-    let medicine_effect: Bool
+    let status: PatientStatus
+}
+
+struct PatientStatus: Decodable {
+    let headache_intensity: [Double]
+    let medicine_taken: [Bool]
+    let medicine_effect: [Double?]
     let medicine_name: String
-    let status: String
 }
 
 struct DailyData: Identifiable, Codable {
@@ -59,60 +107,61 @@ struct DailyData: Identifiable, Codable {
     let medicine_name: String
 }
 
+// JSONに基づいてPatientDetailData構造体を定義
 struct PatientDetailData: Decodable {
-    let patient: Patient
-    let dailyData: [DailyData]
-    
-    init(patient: Patient) {
-        self.patient = patient
-        self.dailyData = PatientDetailData.generateMockData()
-    }
-    
-    private static func generateMockData() -> [DailyData] {
-        let today = Date()
-        var data: [DailyData] = []
-        
-        for i in 0..<30 {
-            if let date = Calendar.current.date(byAdding: .day, value: -i, to: today) {
-                let dailyData = DailyData(
-                    date: date,
-                    user_id: "user_",
-                    strong_light: Bool.random(),
-                    unpleasant_odor: Bool.random(),
-                    took_bath: Bool.random(),
-                    weather_change: Bool.random(),
-                    temperature_change: Bool.random(),
-                    crowds: Bool.random(),
-                    dairy_products: Bool.random(),
-                    alcohol: Bool.random(),
-                    smoked_fish: Bool.random(),
-                    nuts: Bool.random(),
-                    chocolate: Bool.random(),
-                    chinese_food: Bool.random(),
-                    menstruation: Bool.random(),
-                    pill_taken: Bool.random(),
-                    body_posture: Bool.random(),
-                    carried_heavy_object: Bool.random(),
-                    intense_exercise: Bool.random(),
-                    long_driving: Bool.random(),
-                    travel: Bool.random(),
-                    sleep: Bool.random(),
-                    toothache: Bool.random(),
-                    neck_pain: Bool.random(),
-                    hypertension: Bool.random(),
-                    shock: Bool.random(),
-                    stress: Bool.random(),
-                    headache_intensity: Bool.random(),
-                    medicine_taken: Bool.random(),
-                    medicine_effect: Bool.random(),
-                    medicine_name: "Medicine"
-                )
-                data.append(dailyData)
-            }
-        }
-        
-        return data
-    }
+    let date: String
+    let trigger: Trigger
+    let status: Status
+}
+
+struct Trigger: Decodable {
+    let environments: Environments
+    let food: Food
+    let hormone: Hormone
+    let physical: Physical
+}
+struct Environments: Decodable {
+    let strong_light: [Bool]
+    let unpleasant_odor: [Bool]
+    let took_bath: [Bool]
+    let weather_change: [Bool]
+    let temperture_change: [Bool]
+    let crowds: [Bool]
+}
+
+struct Food: Decodable {
+    let dairy_products: [Bool]
+    let alcohol: [Bool]   // Double型からBool型に変更
+    let smoked_fish: [Bool]
+    let nuts: [Bool]
+    let chocolate: [Bool]
+    let chinese_food: [Bool]
+}
+
+struct Hormone: Decodable {
+    let menstruation: [Bool]
+    let pill_taken: [Bool]
+}
+
+struct Physical: Decodable {
+    let body_posture: [Bool]
+    let carried_heavy_object: [Bool]
+    let intense_exercise: [Bool]
+    let long_driving: [Bool]
+    let travel: [Bool]
+    let sleep: [Bool]   // Double型からBool型に変更
+    let toothache: [Bool]
+    let neck_pain: [Bool]
+    let hypertension: [Bool]
+    let shock: [Bool]
+    let stress: [Bool]  // Double型からBool型に変更
+}
+
+struct Status: Decodable {
+    let headache_intensity: [Bool]   // Double型からBool型に変更
+    let medicine_taken: [Bool]
+    let medicine_effect: [Bool]   // Double型からBool型に変更
+    let medicine_name: String    // ここはそのままString型
 }
 
 

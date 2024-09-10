@@ -19,11 +19,10 @@
 		0A6948BE2C73316800B09AD5 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948BD2C73316800B09AD5 /* LoginView.swift */; };
 		0A6948C02C73337200B09AD5 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948BF2C73337100B09AD5 /* SignUpView.swift */; };
 		0A6948C22C77843D00B09AD5 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948C12C77843C00B09AD5 /* MainView.swift */; };
-		0ACB9B412C909A110027A97E /* PatientViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACB9B3D2C909A100027A97E /* PatientViewModel.swift */; };
 		0ACB9B422C909A110027A97E /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACB9B3E2C909A100027A97E /* AnalysisView.swift */; };
 		0ACB9B432C909A110027A97E /* PatientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACB9B3F2C909A100027A97E /* PatientDetailView.swift */; };
-		0ACB9B442C909A110027A97E /* PatientDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACB9B402C909A110027A97E /* PatientDetailViewModel.swift */; };
 		0ACB9B462C909A870027A97E /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACB9B452C909A870027A97E /* PatientView.swift */; };
+		0ACB9B482C90B8430027A97E /* QuestionnaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACB9B472C90B8430027A97E /* QuestionnaireView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,11 +59,10 @@
 		0A6948BD2C73316800B09AD5 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0A6948BF2C73337100B09AD5 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		0A6948C12C77843C00B09AD5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		0ACB9B3D2C909A100027A97E /* PatientViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientViewModel.swift; sourceTree = "<group>"; };
 		0ACB9B3E2C909A100027A97E /* AnalysisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
 		0ACB9B3F2C909A100027A97E /* PatientDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientDetailView.swift; sourceTree = "<group>"; };
-		0ACB9B402C909A110027A97E /* PatientDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientDetailViewModel.swift; sourceTree = "<group>"; };
 		0ACB9B452C909A870027A97E /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
+		0ACB9B472C90B8430027A97E /* QuestionnaireView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,11 +121,10 @@
 				0A610F212C8ADA1200F1EED9 /* AssessView.swift */,
 				0ACB9B3E2C909A100027A97E /* AnalysisView.swift */,
 				0ACB9B452C909A870027A97E /* PatientView.swift */,
-				0ACB9B3D2C909A100027A97E /* PatientViewModel.swift */,
 				0ACB9B3F2C909A100027A97E /* PatientDetailView.swift */,
-				0ACB9B402C909A110027A97E /* PatientDetailViewModel.swift */,
 				0A6948BD2C73316800B09AD5 /* LoginView.swift */,
 				0A6948BF2C73337100B09AD5 /* SignUpView.swift */,
+				0ACB9B472C90B8430027A97E /* QuestionnaireView.swift */,
 				0A6948972C721A8200B09AD5 /* Assets.xcassets */,
 				0A6948992C721A8200B09AD5 /* Preview Content */,
 			);
@@ -295,10 +292,9 @@
 				0ACB9B462C909A870027A97E /* PatientView.swift in Sources */,
 				0A6948C02C73337200B09AD5 /* SignUpView.swift in Sources */,
 				0A610F222C8ADA1200F1EED9 /* AssessView.swift in Sources */,
-				0ACB9B412C909A110027A97E /* PatientViewModel.swift in Sources */,
-				0ACB9B442C909A110027A97E /* PatientDetailViewModel.swift in Sources */,
 				0A6948BE2C73316800B09AD5 /* LoginView.swift in Sources */,
 				0A6948962C721A7D00B09AD5 /* ContentView.swift in Sources */,
+				0ACB9B482C90B8430027A97E /* QuestionnaireView.swift in Sources */,
 				0A610F202C8ACB9400F1EED9 /* ChatView.swift in Sources */,
 				0A6948C22C77843D00B09AD5 /* MainView.swift in Sources */,
 				0ACB9B422C909A110027A97E /* AnalysisView.swift in Sources */,
