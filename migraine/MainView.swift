@@ -6,169 +6,9 @@
 //
 //
 
-//import SwiftUI
-//import Charts
-//
-//struct MainView: View {
-//    var body: some View {
-//        TabView {
-//            WeatherView()
-//                .tabItem {
-//                    Image(systemName: "cloud.sun.fill")
-//                    Text("天候")
-//                }
-//
-//            RecordView()
-//                .tabItem {
-//                    Image(systemName: "book.fill")
-//                    Text("記録")
-//                }
-//        }
-//    }
-//}
-//
-//struct WeatherView: View {
-//    @State private var weatherData: WeatherResponse?
-//
-//    var body: some View {
-//        VStack {
-//            if let weatherData = weatherData {
-//                Text("東京の天気予報")
-//                    .font(.headline)
-//
-//
-//                    ZStack(alignment: .leading) {
-//                        // 縦軸の基準値
-//                        VStack {
-//                            ForEach([1025, 1020, 1015, 1010, 1005, 1000], id: \.self) { value in
-//                                Text("\(value) hPa")
-//                                    .font(.caption)
-//                                    .frame(height: 50)
-//                            }
-//                        }
-//
-//                        .padding(.leading, 5)
-//                        ScrollView(.horizontal) {
-//                        // グラフ部分
-//                        VStack {
-//                            Chart {
-//                                ForEach(weatherData.hourly.time.indices, id: \.self) { index in
-//                                    LineMark(
-//                                        x: .value("Time", weatherData.hourly.time[index]),
-//                                        y: .value("Pressure (hPa)", weatherData.hourly.pressureMSL[index])
-//                                    )
-//                                    .foregroundStyle(Color.blue)
-//                                }
-//                            }
-//                            .chartYScale(domain: 1000...1025)
-//                            .frame(height: 300)
-//                            .padding(.leading, 50) // 縦軸ラベル分のスペースを確保
-//
-//                            HStack(spacing: 10) {
-//                                ForEach(weatherData.hourly.time.indices, id: \.self) { index in
-//                                    VStack {
-//                                        Text(weatherCodeSymbol(for: weatherData.hourly.weatherCode[index]))
-//                                            .font(.title)
-//                                        Text("\(weatherData.hourly.temperature2m[index], specifier: "%.1f") °C")
-//                                            .font(.caption)
-//                                        Text(weatherData.hourly.time[index])
-//                                            .font(.caption)
-//                                    }
-//                                    .frame(maxWidth: .infinity)
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            } else {
-//                Text("データを取得中...")
-//                    .onAppear {
-//                        fetchWeatherData()
-//                    }
-//            }
-//        }
-//        .padding()
-//    }
-//
-//    func fetchWeatherData() {
-//        guard let url = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&hourly=temperature_2m,weather_code,pressure_msl&timezone=Asia%2FTokyo&forecast_days=16") else {
-//            print("Invalid URL")
-//            return
-//        }
-//
-//        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-//            guard let data = data, error == nil else {
-//                print("Error: \(error?.localizedDescription ?? "Unknown error")")
-//                return
-//            }
-//
-//            do {
-//                let decodedData = try JSONDecoder().decode(WeatherResponse.self, from: data)
-//                DispatchQueue.main.async {
-//                    self.weatherData = decodedData
-//                }
-//            } catch {
-//                print("Failed to decode JSON: \(error.localizedDescription)")
-//            }
-//        }
-//
-//        task.resume()
-//    }
-//
-//    func weatherCodeSymbol(for code: Int) -> String {
-//        switch code {
-//        case 0: return "☀️" // 晴れ
-//        case 1: return "🌤️" // 少し曇り
-//        case 2: return "⛅️" // 曇り
-//        case 3: return "☁️" // 完全に曇り
-//        case 45, 48: return "🌫️" // 霧
-//        case 51, 53, 55: return "🌦️" // 小雨
-//        case 61, 63, 65: return "🌧️" // 雨
-//        case 71, 73, 75: return "🌨️" // 雪
-//        case 95: return "⛈️" // 雷雨
-//        default: return "❓" // 未知の天気コード
-//        }
-//    }
-//}
-//
-//// デコードするための構造体を定義
-//struct WeatherResponse: Codable {
-//    let hourly: HourlyWeather
-//}
-//
-//struct HourlyWeather: Codable {
-//    let time: [String]
-//    let temperature2m: [Double]
-//    let weatherCode: [Int]
-//    let pressureMSL: [Double]
-//
-//    enum CodingKeys: String, CodingKey {
-//        case time
-//        case temperature2m = "temperature_2m"
-//        case weatherCode = "weather_code"
-//        case pressureMSL = "pressure_msl"
-//    }
-//}
-//
-//struct RecordView: View {
-//    var body: some View {
-//        Text("記録の内容")
-//    }
-//}
-//
-//struct MainView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainView()
-//    }
-//}
-
 import SwiftUI
 import Charts
 import Foundation
-
-class ChatData: ObservableObject{
-    @Published var chatID: String = ""
-}
 
 struct MainView: View {
     var body: some View {
@@ -178,13 +18,13 @@ struct MainView: View {
                     Image(systemName: "cloud.sun.fill")
                     Text("天候")
                 }
-            let mockPatient = Patient(name: "Aさん", status: "良い")
-            let mockData = PatientDetailData(patient: mockPatient)
-            RecordView(detailData: mockData)
-                .tabItem {
-                    Image(systemName: "book.fill")
-                    Text("記録")
-                }
+//            let mockPatient = Patient(name: "Aさん", status: "良い")
+//            let mockData = PatientDetailData(patient: mockPatient)
+//            RecordView(detailData: mockData)
+//                .tabItem {
+//                    Image(systemName: "book.fill")
+//                    Text("記録")
+//                }
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -196,8 +36,6 @@ struct WeatherView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoggingOut = false
     @State private var isNavigatingToChatView = false
-    @State private var showError = false
-    @StateObject var chatData = ChatData()
     var body: some View {
         NavigationView{
             VStack {
@@ -205,29 +43,30 @@ struct WeatherView: View {
                     
                     ZStack(alignment: .leading) {
                         // 縦軸の基準値
-//                        VStack {
-//                            ForEach([1025, 1020, 1015, 1010, 1005, 1000], id: \.self) { value in
-//                                Text("\(value) hPa")
-//                                    .font(.caption)
-//                                    .frame(height: 50)
-//                            }
-//                        }
-//                        .padding(.leading, 5)
+                        VStack {
+                            ForEach([1025, 1020, 1015, 1010, 1005, 1000], id: \.self) { value in
+                                Text("\(value) hPa")
+                                    .font(.caption)
+                                    .frame(height: 50)
+                            }
+                        }
+                        .padding(.leading, 5)
                         ScrollView(.horizontal) {
                             VStack {
                                 HStack(spacing: 10) {
                                     ForEach(weatherData.hourly.time.indices, id: \.self) { index in
                                         VStack {
-                                            Text(formatDate(weatherData.hourly.time[index]))
-                                                .font(.headline)
-                                            Text("\(weatherData.hourly.temperature2m[index], specifier: "%.1f") °C")
+                                            Text(weatherCodeSymbol(for: weatherData.hourly.weatherCode[index] ?? 0))
+                                                .font(.title)
+                                            Text("\(weatherData.hourly.temperature2m[index] ?? 0.0, specifier: "%.1f") °C")
                                                 .font(.caption)
-                                            Text(weatherCodeSymbol(for: weatherData.hourly.weatherCode[index]))
-                                                .font(.title) // 天気記号を大きく表示
+                                            Text(formatDate(weatherData.hourly.time[index]))
+                                                .font(.caption)
                                         }
                                         .frame(maxWidth: .infinity)
                                     }
                                 }
+                                .padding(.bottom, 10)
                             
                             
                                 
@@ -237,7 +76,7 @@ struct WeatherView: View {
                                         ForEach(weatherData.hourly.time.indices, id: \.self) { index in
                                             LineMark(
                                                 x: .value("Time", formatDate(weatherData.hourly.time[index])),
-                                                y: .value("Pressure (hPa)", weatherData.hourly.pressureMSL[index])
+                                                y: .value("Pressure (hPa)", weatherData.hourly.pressureMSL[index] ?? 0.0)
                                             )
                                             .foregroundStyle(Color.blue)
                                         }
@@ -257,11 +96,13 @@ struct WeatherView: View {
                             fetchWeatherData()
                         }
                 }
-                NavigationLink(destination: ChatView().environmentObject(chatData), isActive: $isNavigatingToChatView) {
+                NavigationLink(destination: ChatView(), isActive: $isNavigatingToChatView) {
                     EmptyView()
                 }
+
                 Button(action: {
-                    fetchData()
+                    // ボタンが押されたときに`isNavigatingToChatView`を`true`に設定して遷移する
+                    isNavigatingToChatView = true
                 }) {
                     Text("記録")
                         .font(.headline)
@@ -270,9 +111,6 @@ struct WeatherView: View {
                         .frame(width: 100, height: 50)
                         .background(Color.blue)
                         .cornerRadius(10)
-                }
-                .alert(isPresented: $showError) {
-                    Alert(title: Text("エラー"), message: Text("サーバに接続できませんでした"), dismissButton: .default(Text("OK")))
                 }
             }
             .navigationBarTitle("天気予報", displayMode: .inline)
@@ -293,78 +131,10 @@ struct WeatherView: View {
             }
             .fullScreenCover(isPresented: $isLoggingOut) {
                 ContentView()
-                    .environmentObject(chatData)
                     .transition(.move(edge: .trailing)) // 右から左にスライド
             }
             .padding()
         }
-    }
-
-    func fetchData() {
-        guard let url = URL(string: UserSession.shared.endPoint + "/start_chat") else {
-            print("Invalid URL")
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Bearer \(UserSession.shared.jwt_token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body: [String: Any] = ["user_id": UserSession
-            .shared.userID
-        ]
-        
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
-        } catch {
-            print("Failed to serialize request body: \(error.localizedDescription)")
-            return
-        }
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil, let httpResponse = response as? HTTPURLResponse else {
-                DispatchQueue.main.async {
-                    showError = true
-                }
-                return
-            }
-
-            // データがnilでないことを確認してからアンラップ
-            guard let data = data else {
-                print("No data received")
-                DispatchQueue.main.async {
-                    showError = true
-                }
-                return
-            }
-
-            if httpResponse.statusCode == 201 {
-                DispatchQueue.main.async {
-                    isNavigatingToChatView = true
-                }
-                // サーバーからのレスポンスを処理
-                do {
-                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                        let chatID = jsonResponse["chat_id"] as? String {
-                        DispatchQueue.main.async {
-                            print("chatID----\n" + chatID)
-                            chatData.chatID = chatID // userIDを更新
-                        }
-                    } else {
-                        print("Invalid JSON response")
-                    }
-                } catch {
-                    print("Failed to parse response: \(error.localizedDescription)")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    showError = true
-                }
-            }
-        }
-
-        task.resume()
     }
 
     func fetchWeatherData() {
@@ -382,7 +152,7 @@ struct WeatherView: View {
         
         // リクエストの作成
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
         
         // AuthorizationヘッダーにJWTトークンを設定
         request.setValue("Bearer \(UserSession.shared.jwt_token)", forHTTPHeaderField: "Authorization")
@@ -530,63 +300,15 @@ struct WeatherResponse: Codable {
 
 struct HourlyWeather: Codable {
     let time: [String]
-    let temperature2m: [Double]
-    let weatherCode: [Int]
-    let pressureMSL: [Double]
+    let temperature2m: [Double?]
+    let weatherCode: [Int?]
+    let pressureMSL: [Double?]
 
     enum CodingKeys: String, CodingKey {
         case time
         case temperature2m = "temperature_2m"
         case weatherCode = "weather_code"
         case pressureMSL = "pressure_msl"
-    }
-}
-
-struct Patient: Identifiable {
-    let id = UUID()
-    let name: String
-    let status: String
-}
-
-struct DailyData: Identifiable {
-    let id = UUID()
-    let date: Date
-    let headache: Int // 0〜5
-    let medication: Bool // マルかバツ
-    let diet: String // 食事内容
-    let menstruation: Bool // マルかバツ
-    let statusMemo: String
-}
-
-struct PatientDetailData {
-    let patient: Patient
-    let dailyData: [DailyData]
-    
-    init(patient: Patient) {
-        self.patient = patient
-        self.dailyData = PatientDetailData.generateMockData()
-    }
-    
-    private static func generateMockData() -> [DailyData] {
-        let today = Date()
-        var data: [DailyData] = []
-        
-        for i in 0..<30 {
-            if let date = Calendar.current.date(byAdding: .day, value: -i, to: today) {
-                let dailyData = DailyData(
-                    date: date,
-                    headache: Int.random(in: 0...5),
-                    medication: Bool.random(),
-                    diet: ["Pasta", "Salad", "Pizza", "Sushi", "Bread"].randomElement() ?? "Unknown",
-                    menstruation: Bool.random(),
-                    statusMemo: "気圧低い"
-                    
-                )
-                data.append(dailyData)
-            }
-        }
-        
-        return data
     }
 }
 
@@ -650,29 +372,29 @@ struct RecordView: View {
                         .padding(.bottom, 8)
                         
                         // データの行
-                        ForEach(detailData.dailyData) { data in
-                            HStack {
-                                Text(formatDate(data.date))
-                                    .frame(width: 100, alignment: .leading)
-                                Text("\(data.headache)")
-                                    .frame(width: 100, alignment: .center)
-                                Text(data.medication ? "✓" : "✗")
-                                    .frame(width: 100, alignment: .center)
-                                Text(data.diet)
-                                    .frame(width: 100, alignment: .center)
-                                Text(data.menstruation ? "✓" : "✗")
-                                    .frame(width: 100, alignment: .center)
-                                Text(data.statusMemo)
-                                    .frame(width: 100, alignment: .center)
-                            }
-                            .padding(.vertical, 4)
-                            Divider() // 各行の間に区切り線を追加
-                        }
+//                        ForEach(detailData.dailyData) { data in
+//                            HStack {
+//                                Text(formatDate(data.date))
+//                                    .frame(width: 100, alignment: .leading)
+//                                Text("\(data.headache)")
+//                                    .frame(width: 100, alignment: .center)
+//                                Text(data.medication ? "✓" : "✗")
+//                                    .frame(width: 100, alignment: .center)
+//                                Text(data.diet)
+//                                    .frame(width: 100, alignment: .center)
+//                                Text(data.menstruation ? "✓" : "✗")
+//                                    .frame(width: 100, alignment: .center)
+//                                Text(data.statusMemo)
+//                                    .frame(width: 100, alignment: .center)
+//                            }
+//                            .padding(.vertical, 4)
+//                            Divider() // 各行の間に区切り線を追加
+//                        }
                     }
                     .padding()
                 }
             }
-            .navigationBarTitle(Text(detailData.patient.name), displayMode: .inline) // ナビゲーションバーの中央に患者名
+            .navigationBarTitle(Text(detailData.patient.user_name), displayMode: .inline) // ナビゲーションバーの中央に患者名
         }
     }
     
