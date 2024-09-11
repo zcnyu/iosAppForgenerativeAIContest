@@ -156,45 +156,25 @@ struct AnalysisView: View {
             if type == "hit6" && question.starts(with: "question") {
                 if let questionNumber = Int(question.replacingOccurrences(of: "question", with: "")),
                    questionNumber >= 1 && questionNumber <= 6 {
-                    print("hit6 - Question: \(question), Value: \(value)")  // デバッグ用
-                    totalScore += scoreHit6(for: value)
+//                    print("hit6 - Question: \(question), Value: \(value)")  // デバッグ用
+                    totalScore += value
+//                    print("totalscore--------  ")
+//                    print(totalScore)
                 }
             } else if type == "mibs4" && question.starts(with: "question") {
                 if let questionNumber = Int(question.replacingOccurrences(of: "question", with: "")),
                    questionNumber >= 1 && questionNumber <= 4 {
-                    print("mibs4 - Question: \(question), Value: \(value)")  // デバッグ用
-                    totalScore += scoreMibs4(for: value)
+//                    print("mibs4 - Question: \(question), Value: \(value)")  // デバッグ用
+                    totalScore += value
+
                 }
             }
+            print("totalscore--------  ")
+            print( value)
         }
 
-        print("Total score for \(type): \(totalScore)")  // デバッグ用
+//        print("Total score for \(type): \(totalScore)")  // デバッグ用
         return String(totalScore)
-    }
-
-    // hit6のスコア計算式
-    private func scoreHit6(for value: Int) -> Int {
-        switch value {
-        case 1: return 6
-        case 2: return 8
-        case 3: return 10
-        case 4: return 11
-        case 5: return 13
-        default: return 0
-        }
-    }
-
-    // mibs4のスコア計算式
-    private func scoreMibs4(for value: Int) -> Int {
-        switch value {
-        case 1: return 0
-        case 2: return 0
-        case 3: return 1
-        case 4: return 2
-        case 5: return 3
-        case 6: return 3
-        default: return 0
-        }
     }
 
     // 頭痛が強い日のTrueの項目を集計して、Trueの数が多い順に並べて表示する関数
