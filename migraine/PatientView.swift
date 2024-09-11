@@ -11,7 +11,6 @@ class PatientViewModel: ObservableObject {
             print("Invalid URL")
             return
         }
-
         // URLリクエストを作成し、必要なヘッダー情報を追加
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -23,12 +22,6 @@ class PatientViewModel: ObservableObject {
             if let error = error {
                 print("Error fetching data: \(error)")
                 return
-            }
-
-            // レスポンスのステータスコードを確認
-            if let httpResponse = response as? HTTPURLResponse {
-                let statusCode = httpResponse.statusCode
-                print("Status Code: \(statusCode)")
             }
 
             // データが存在するか確認し、デコードする
@@ -72,10 +65,7 @@ class PatientViewModel: ObservableObject {
             // レスポンスのステータスコードを確認し、200だったらfetchPatientsを呼び出す
             if let httpResponse = response as? HTTPURLResponse {
                 let statusCode = httpResponse.statusCode
-                print("Status Code: \(statusCode)")
-
                 if statusCode == 200 {
-                    // 成功したら患者リストを再取得
                     DispatchQueue.main.async {
                         self.fetchPatients(jwtToken: jwtToken)
                     }
@@ -90,59 +80,70 @@ struct PatientView: View {
     @State private var isPresentingAlert = false
     @State private var newEmail = ""
     @State private var selectedPatient: Patient? // 選択された患者を保持
-    @State private var isDetailViewActive = false // 詳細ビューへの遷移を制御
+    @Environment(\.presentationMode) var presentationMode // 追加: 表示を管理するための環境変数
 
     var body: some View {
         NavigationView {
             List(viewModel.patients) { patient in
-                // 患者をタップすると詳細ビューに遷移
-                Button(action: {
-                    // 患者がタップされたら、UserSessionに情報を格納し、詳細ビューへ
-                    UserSession.shared.userName = patient.user_name
-                    UserSession.shared.userID = patient.user_id
-                    selectedPatient = patient
-                    isDetailViewActive = true
-                }) {
-                    VStack(alignment: .leading) {
-                        Text(patient.user_name)
-                            .font(.headline)
-                        Text("メール: \(patient.user_email)")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                // NavigationLinkをVStackに直接ラップし、UserSession.sharedを設定
+                NavigationLink(
+                    destination: PatientDetailView(patientId: patient.user_id, periodStart: "2023-01-01", recentK: 30),
+                    label: {
+                        VStack(alignment: .leading) {
+                            Text(patient.user_name)
+                                .font(.headline)
+                            Text("メール: \(patient.user_email)")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
 
-                        if let headacheIntensity = patient.status.headache_intensity.first {
-                            Text("頭痛の強さ: \(headacheIntensity)")
+                            // 複数の頭痛の強さを表示 (null の場合は空配列)
+                            ForEach(patient.status.headache_intensity ?? [], id: \.self) { intensity in
+                                Text("頭痛の強さ: \(intensity)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+
+                            // 複数の薬の服用状況を表示 (null の場合は空配列)
+                            ForEach(patient.status.medicine_taken ?? [], id: \.self) { medicineTaken in
+                                Text("薬の服用: \(medicineTaken ? "服用済み" : "未服用")")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+
+                            // 複数の薬効を表示 (null の場合は "データなし")
+                            ForEach(patient.status.medicine_effect ?? [], id: \.self) { medicineEffect in
+                                let effectText = medicineEffect == nil ? "データなし" : "\(medicineEffect!)"
+                                Text("薬効: \(effectText)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+
+                            Text("薬の名前: \(patient.status.medicine_name ?? "不明")")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
-
-                        if let medicineTaken = patient.status.medicine_taken.first {
-                            Text("薬の服用: \(medicineTaken ? "服用済み" : "未服用")")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        .padding(.vertical, 8)
+                        // タップ時にUserSession.sharedを更新
+                        .onTapGesture {
+                            UserSession.shared.userName = patient.user_name
+                            UserSession.shared.userID = patient.user_id
                         }
-
-                        if let medicineEffect = patient.status.medicine_effect.first {
-                            let effectText = medicineEffect == nil ? "データなし" : "\(medicineEffect!)"
-                            Text("薬効: \(effectText)")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-
-                        Text("薬の名前: \(patient.status.medicine_name)")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
                     }
-                    .padding(.vertical, 8)
-                }
+                )
             }
             .navigationTitle("Patients")
             .toolbar {
-                // 追加ボタン
-                Button(action: {
-                    isPresentingAlert = true
-                }) {
-                    Image(systemName: "plus")
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isPresentingAlert = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarLeading) { // ログアウトボタン
+                    Button("ログアウト") {
+                        presentationMode.wrappedValue.dismiss() // ContentViewに戻る
+                    }
                 }
             }
             .onAppear {
@@ -157,11 +158,8 @@ struct PatientView: View {
             }, message: {
                 Text("新しい患者のメールを入力してください。")
             })
-            // 患者が選択されたら詳細ビューへ遷移
-            NavigationLink(destination: PatientDetailView(patientId: UserSession.shared.userID, periodStart: "2023-01-01", recentK: 0), isActive: $isDetailViewActive) {
-                EmptyView() // このビューは遷移のために必要なだけ
-            }
         }
+        .navigationBarBackButtonHidden(true) // 戻るボタンを非表示にする
     }
 }
 

@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Hit6View
 struct Hit6View: View {
     @State private var score1: Int = 6
     @State private var score2: Int = 6
@@ -7,6 +8,7 @@ struct Hit6View: View {
     @State private var score4: Int = 6
     @State private var score5: Int = 6
     @State private var score6: Int = 6
+    @Environment(\.presentationMode) var presentationMode // 画面を戻すための環境変数
     
     var totalScore: Int {
         return score1 + score2 + score3 + score4 + score5 + score6
@@ -18,14 +20,6 @@ struct Hit6View: View {
                 VStack(spacing: 0) {
                     // 固定ヘッダー
                     HStack {
-                        Button(action: {
-                            // 戻るボタンのアクション
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.black)
-                        }
-                        .padding(.leading)
-                        
                         Spacer()
                         
                         Text("hit6 分析")
@@ -33,10 +27,6 @@ struct Hit6View: View {
                             .foregroundColor(.black)
                         
                         Spacer()
-                        
-                        // 右端にスペースを確保
-                        Spacer()
-                            .frame(width: 44)
                     }
                     .frame(height: 60)
                     .background(Color.green.opacity(0.7))
@@ -129,15 +119,15 @@ struct Hit6View: View {
         }
     }
     
-    // サーバーにスコアを送信する関数（指定されたフォーマットに変更）
+    // サーバーにスコアを送信する関数
     func component_post_questionnaire_result(scores: [Int]) {
-        guard let url = URL(string: "http://13.210.90.34:5000/post_questionnaire_result") else { return }
+        guard let url = URL(string: UserSession.shared.endPoint + "/post_questionnaire_result") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = [
             "Content-Type": "application/json",
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ"
+            "Authorization": "Bearer \(UserSession.shared.jwt_token)"
         ]
         
         let body: [String: Any] = [
@@ -154,6 +144,9 @@ struct Hit6View: View {
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 201 {
                     print("Score successfully sent!")
+                    DispatchQueue.main.async {
+                        presentationMode.wrappedValue.dismiss() // スコア送信成功後に画面を戻る
+                    }
                 } else {
                     print("Request failed with status code: \(httpResponse.statusCode)")
                 }
@@ -164,6 +157,7 @@ struct Hit6View: View {
     }
 }
 
+// CircleButton構造体
 struct CircleButton: View {
     @Binding var selectedValue: Int
     let value: Int
@@ -205,12 +199,14 @@ struct CircleButton: View {
     }
 }
 
+// Mibs4View
 struct Mibs4View: View {
     @State private var score1: Int = 1
     @State private var score2: Int = 1
     @State private var score3: Int = 1
     @State private var score4: Int = 1
     @State private var serverResponse: String = ""
+    @Environment(\.presentationMode) var presentationMode // 画面を戻すための環境変数
     
     var ttotalScore: Int {
         return scoreValue(for: score1) + scoreValue(for: score2) + scoreValue(for: score3) + scoreValue(for: score4)
@@ -224,15 +220,6 @@ struct Mibs4View: View {
             VStack(spacing: 0) {
                 // 固定ヘッダー
                 HStack {
-                    Button(action: {
-                        // 戻るボタンのアクションをここに記述
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
-                            .font(.headline)
-                    }
-                    .padding(.leading)
-                    
                     Spacer()
                     
                     Text("mibs4 分析")
@@ -240,9 +227,6 @@ struct Mibs4View: View {
                         .foregroundColor(.black)
                     
                     Spacer()
-                    
-                    Spacer()
-                        .frame(width: 44)
                 }
                 .frame(height: 60)
                 .background(Color.green.opacity(0.7))
@@ -338,12 +322,12 @@ struct Mibs4View: View {
     
     // アンケート結果をサーバーに送信する関数
     func sendQuestionnaireResult() {
-        guard let url = URL(string: "http://13.210.90.34:5000/post_questionnaire_result") else { return }
+        guard let url = URL(string: UserSession.shared.endPoint + "/post_questionnaire_result") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer YOUR_JWT_TOKEN", forHTTPHeaderField: "Authorization") // JWTトークンの設定
+        request.setValue("Bearer \(UserSession.shared.jwt_token)", forHTTPHeaderField: "Authorization") // JWTトークンの設定
         
         let body: [String: Any] = [
             "questionnaire_title": "mibs4",
@@ -364,6 +348,7 @@ struct Mibs4View: View {
                 DispatchQueue.main.async {
                     if httpResponse.statusCode == 201 {
                         self.serverResponse = "Score successfully sent!"
+                        presentationMode.wrappedValue.dismiss() // スコア送信成功後に画面を戻る
                     } else {
                         self.serverResponse = "Failed to send score, status code: \(httpResponse.statusCode)"
                     }
@@ -371,28 +356,28 @@ struct Mibs4View: View {
             }
         }.resume()
     }
-    
     // 各選択肢の点数を設定
-    func scoreValue(for value: Int) -> Int {
-        switch value {
-        case 1: // 「わからない/該当なし」
-            return 0
-        case 2: // 「全くなかった」
-            return 0
-        case 3: // 「ほとんどなかった」
-            return 1
-        case 4: // 「時々」
-            return 2
-        case 5: // 「多くの時間」
-            return 3
-        case 6: // 「ほぼいつも/いつも」
-            return 3
-        default:
-            return 0
+        func scoreValue(for value: Int) -> Int {
+            switch value {
+            case 1: // 「わからない/該当なし」
+                return 0
+            case 2: // 「全くなかった」
+                return 0
+            case 3: // 「ほとんどなかった」
+                return 1
+            case 4: // 「時々」
+                return 2
+            case 5: // 「多くの時間」
+                return 3
+            case 6: // 「ほぼいつも/いつも」
+                return 3
+            default:
+                return 0
+            }
         }
-    }
 }
 
+// cCircleButton構造体
 struct cCircleButton: View {
     @Binding var selectedValue: Int // 選択された識別値を保持
     let value: Int // 識別用の値
@@ -451,6 +436,7 @@ struct QuestionnaireView: View {
         }
     }
 }
+
 struct QuestionnaireView_Previews: PreviewProvider {
     static var previews: some View {
         QuestionnaireView()

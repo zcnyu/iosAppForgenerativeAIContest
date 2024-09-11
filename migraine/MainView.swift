@@ -18,13 +18,11 @@ struct MainView: View {
                     Image(systemName: "cloud.sun.fill")
                     Text("天候")
                 }
-//            let mockPatient = Patient(name: "Aさん", status: "良い")
-//            let mockData = PatientDetailData(patient: mockPatient)
-//            RecordView(detailData: mockData)
-//                .tabItem {
-//                    Image(systemName: "book.fill")
-//                    Text("記録")
-//                }
+            PatientDetailView(patientId: UserSession.shared.userID, periodStart: "2023-01-01", recentK: 0)
+                .tabItem {
+                    Image(systemName: "book.fill")
+                    Text("記録")
+                }
         }
         .navigationBarBackButtonHidden(true)
     }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0A610F202C8ACB9400F1EED9 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */; };
-		0A610F222C8ADA1200F1EED9 /* AssessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A610F212C8ADA1200F1EED9 /* AssessView.swift */; };
 		0A6948942C721A7D00B09AD5 /* migraineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948932C721A7D00B09AD5 /* migraineApp.swift */; };
 		0A6948962C721A7D00B09AD5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6948952C721A7D00B09AD5 /* ContentView.swift */; };
 		0A6948982C721A8200B09AD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A6948972C721A8200B09AD5 /* Assets.xcassets */; };
@@ -44,7 +43,6 @@
 
 /* Begin PBXFileReference section */
 		0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
-		0A610F212C8ADA1200F1EED9 /* AssessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessView.swift; sourceTree = "<group>"; };
 		0A66BB012C8EF7E500A9A261 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0A6948902C721A7D00B09AD5 /* migraine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = migraine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A6948932C721A7D00B09AD5 /* migraineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = migraineApp.swift; sourceTree = "<group>"; };
@@ -118,7 +116,6 @@
 				0A6948952C721A7D00B09AD5 /* ContentView.swift */,
 				0A610F1F2C8ACB9400F1EED9 /* ChatView.swift */,
 				0A6948C12C77843C00B09AD5 /* MainView.swift */,
-				0A610F212C8ADA1200F1EED9 /* AssessView.swift */,
 				0ACB9B3E2C909A100027A97E /* AnalysisView.swift */,
 				0ACB9B452C909A870027A97E /* PatientView.swift */,
 				0ACB9B3F2C909A100027A97E /* PatientDetailView.swift */,
@@ -291,7 +288,6 @@
 			files = (
 				0ACB9B462C909A870027A97E /* PatientView.swift in Sources */,
 				0A6948C02C73337200B09AD5 /* SignUpView.swift in Sources */,
-				0A610F222C8ADA1200F1EED9 /* AssessView.swift in Sources */,
 				0A6948BE2C73316800B09AD5 /* LoginView.swift in Sources */,
 				0A6948962C721A7D00B09AD5 /* ContentView.swift in Sources */,
 				0ACB9B482C90B8430027A97E /* QuestionnaireView.swift in Sources */,
