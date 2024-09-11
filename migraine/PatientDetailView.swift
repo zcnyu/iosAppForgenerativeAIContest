@@ -14,7 +14,7 @@ struct PatientDetailView: View {
 
     static var today: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.dateFormat = "yyyy-MM-dd-hh"
         return formatter.string(from: Date())
     }
 
@@ -22,7 +22,8 @@ struct PatientDetailView: View {
         _viewModel = StateObject(wrappedValue: PatientDetailViewModel())
         self.patientId = patientId
         self.periodStart = periodStart
-        self.periodEnd = PatientDetailView.today
+//        self.periodEnd = PatientDetailView.today
+        self.periodEnd = "2024-09-12-15"
         self.recentK = recentK
     }
     

@@ -44,6 +44,7 @@ class PatientDetailViewModel: ObservableObject {
                     self.isLoading = false // エラーでもローディングを終了
                 }
             }, receiveValue: { [weak self] detailData in
+                print("Received data: \(detailData)") // データをコンソールに出力
                 self?.detailData = detailData
                 self?.isLoading = false // データ取得が完了したらローディングを終了
             })

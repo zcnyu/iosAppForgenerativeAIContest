@@ -121,6 +121,8 @@ struct AnalysisView: View {
                 fetchData { result in
                     switch result {
                     case .success(let data):
+                        // データをコンソールに出力
+                        print("Questionnaire Data: \(data)")
                         // hit6とmibs4のスコアを計算
                         hit6Score = calculateScore(for: data, type: "hit6")
                         mibs4Score = calculateScore(for: data, type: "mibs4")

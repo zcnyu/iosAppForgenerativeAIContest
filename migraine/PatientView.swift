@@ -87,7 +87,7 @@ struct PatientView: View {
             List(viewModel.patients) { patient in
                 // NavigationLinkをVStackに直接ラップし、UserSession.sharedを設定
                 NavigationLink(
-                    destination: PatientDetailView(patientId: patient.user_id, periodStart: "2023-01-01", recentK: 30),
+                    destination: PatientDetailView(patientId: patient.user_id, periodStart: "2023-01-01-00", recentK: 30),
                     label: {
                         VStack(alignment: .leading) {
                             Text(patient.user_name)
